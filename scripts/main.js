@@ -124,3 +124,11 @@ curveInput.addEventListener('keyup', function(evt) {
     addCurveButton.disabled = false;
   }
 });
+
+
+window.addEventListener('keydown', function(evt) {
+  if(evt.keyCode === 13 && !document.querySelector('.add-curve-form').classList.contains('hidden')) {
+    addCurve(params);
+    toggleAddCurveModal();
+  }
+});

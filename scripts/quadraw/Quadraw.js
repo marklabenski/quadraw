@@ -41,7 +41,7 @@ var quadraw = function quadraw(_scale, context, width, height) {
     this.addCurve = function addParable(params, color) {
       //return the index of the Parable
       var index = drawableCount++;
-      drawables[index] = new Curve(params, color, index, this);
+      drawables[index] = createCurve(params, color, index, this);
       draw();
       return index;
     };

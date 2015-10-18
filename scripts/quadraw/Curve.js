@@ -1,5 +1,5 @@
 "use strict";
-var Curve = function Curve(params, color, index, quadraw) {
+var createCurve = function createCurve(params, color, index, quadraw) {
     var calcXs = function (vars) {
       var a = vars.a;
       var b = vars.b;
@@ -29,26 +29,25 @@ var Curve = function Curve(params, color, index, quadraw) {
       var angularPoint = quadraw.calcScenePoint({x: calcAngularPoint(params).x, y: angularY});
       var rightTopPoint = quadraw.calcScenePoint({x: calcXs(params).xPlus, y: (quadraw.scale / 2) * sign});
 
-      if(params.hasOwnProperty('xMin') || params.hasOwnProperty('xMax')) {
+      if (params.hasOwnProperty('xMin') || params.hasOwnProperty('xMax')) {
         // the clipping starts
         ctx.save();
 
         ctx.beginPath();
 
-        var clippingLeft = {x:0, y:0};
-        var clippingRight = {x:quadraw.sceneWidth, y:quadraw.sceneHeight};
-        var xMin = -quadraw.scale/2;
+        var clippingLeft = {x: 0, y: 0};
+        var clippingRight = {x: quadraw.sceneWidth, y: quadraw.sceneHeight};
+        var xMin = -quadraw.scale / 2;
 
-        if(params.hasOwnProperty('xMin')) {
+        if (params.hasOwnProperty('xMin')) {
           clippingLeft = quadraw.calcScenePoint({x: params.xMin, y: 0});
           xMin = params.xMin;
         }
-        if(params.hasOwnProperty('xMax')) {
+        if (params.hasOwnProperty('xMax')) {
           clippingRight = quadraw.calcScenePoint(
             {x: ((params.xMax + Math.abs(xMin)) - (quadraw.scale / 2)), y: 0}
           );
         }
-
         ctx.rect(clippingLeft.x, 0, clippingRight.x, quadraw.sceneHeight);
 
         // actually clip
@@ -67,46 +66,42 @@ var Curve = function Curve(params, color, index, quadraw) {
       ctx.restore();
     };
 
-    this.index = index;
-
-    this.draw = function draw() {
-      drawCurve();
-      return this;
-    };
-
-    this.log = function log() {
-      console.log(leftTopPoint, rightTopPoint, angularPoint);
-    };
-
-    this.getParamsString = function getParamsString() {
-      var paramsString = "";
-      if(params.a !== 0) paramsString += params.a;
-      paramsString += "x²";
-      if(params.b !== 0) {
-        paramsString += params.b + "x";
-      }
-      if(params.c !== 0) paramsString += params.c;
-      if(params.hasOwnProperty('xMin') || params.hasOwnProperty('xMax')) {
-        paramsString += "(";
-        if(params.hasOwnProperty('xMin')) {
-          paramsString += "xMin: " + params.xMin;
-          if(params.hasOwnProperty('xMax')) {
-            paramsString += ", ";
+    var curve = {
+      index: index,
+      draw: function draw() {
+        drawCurve();
+        return this;
+      },
+      getParamsString: function getParamsString() {
+        var paramsString = "";
+        if (params.a !== 0) paramsString += params.a;
+        paramsString += "x²";
+        if (params.b !== 0) {
+          paramsString += params.b + "x";
+        }
+        if (params.c !== 0) paramsString += params.c;
+        if (params.hasOwnProperty('xMin') || params.hasOwnProperty('xMax')) {
+          paramsString += "(";
+          if (params.hasOwnProperty('xMin')) {
+            paramsString += "xMin: " + params.xMin;
+            if (params.hasOwnProperty('xMax')) {
+              paramsString += ", ";
+            }
           }
+          if (params.hasOwnProperty('xMax')) {
+            paramsString += "xMax: " + params.xMax;
+          }
+          paramsString += ")";
         }
-        if(params.hasOwnProperty('xMax')) {
-          paramsString += "xMax: " + params.xMax;
-        }
-        paramsString += ")";
-      }
 
-      return paramsString;
-    };
-    this.getColor = function getColor() {
-      return color;
+        return paramsString;
+      }, getColor: function getColor() {
+        return color;
+      },
+
     };
 
-    return this;
+    return Object.create(curve);
   }
   ;
 
