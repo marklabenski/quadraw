@@ -1,46 +1,67 @@
 "use strict";
-const Quadraw = function Quadraw(_scale) {
-  let drawables = {};
-  let drawableCount = 0;
-  const colors = {
-    coordPlane: "rgb(200,200,200)",
+var quadraw = function quadraw(_scale, context, width, height) {
+  var drawables = {};
+  var drawableCount = 0;
+  var colors = {
+    coordPlane: "rgb(140,150,140)",
     curve: "rgb(200,20,20)",
     text: "rgb(44,66,44)",
   };
-  this.scale = _scale;
 
-  //push coordinates plane at first
-  drawables[drawableCount++] = new CoordsPlane(colors.coordPlane, this);
-
-  const draw = function() {
+  var draw = function () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    Object.keys(drawables).map(function(index) {
+    Object.keys(drawables).map(function (index) {
       drawables[index].draw();
     });
   };
 
-  this.calcScenePoint = function (point) {
-    let scenePoint = {x: 0, y: 0};
-    let halfSceneWidth = (sceneWidth / 2);
-    let halfSceneHeight = (sceneHeight / 2);
+  var quadraw = function () {
+    //push coordinates plane at first
+    drawables[drawableCount++] = createCoordsPlane(colors.coordPlane, this);
 
-    let x = point.x / (this.scale / 2);
-    let y = point.y / (this.scale / 2);
-    scenePoint.x = (x * (halfSceneWidth)) + halfSceneWidth;
-    scenePoint.y = (y * -(halfSceneHeight)) + halfSceneHeight;
-    return scenePoint;
-  };
-  this.addCurve = function addParable(params, color) {
-    //return the index of the Parable
-    let index = drawableCount++;
-    drawables[index] = new Curve(params, color, this);
-    draw();
-    return index;
-  };
-  this.removeCurve = function removeParable(index) {
-    drawables[index] = null;
-    draw();
+    this.scale =  _scale;
+    this.sceneWidth= width;
+    this.sceneHeight= height;
+
+    this.setScale = function setScale(_scale) {
+      this.scale = _scale;
+      draw();
+    };
+    this.calcScenePoint = function (point) {
+      var scenePoint = {x: 0, y: 0};
+      var halfSceneWidth = (this.sceneWidth / 2);
+      var halfSceneHeight = (this.sceneHeight / 2);
+
+      var x = point.x / (this.scale / 2);
+      var y = point.y / (this.scale / 2);
+      scenePoint.x = (x * (halfSceneWidth)) + halfSceneWidth;
+      scenePoint.y = (y * -(halfSceneHeight)) + halfSceneHeight;
+      return scenePoint;
+    };
+    this.addCurve = function addParable(params, color) {
+      //return the index of the Parable
+      var index = drawableCount++;
+      drawables[index] = new Curve(params, color, index, this);
+      draw();
+      return index;
+    };
+    this.getCurveList = function getCurves() {
+      var curves = [];
+      Object.keys(drawables).map(function (index) {
+        if (index != 0) {
+          curves.push(drawables[index]);
+        }
+      });
+
+      return curves;
+    };
+    this.removeCurve = function removeCurve(curveIndex) {
+      delete drawables[curveIndex];
+      draw();
+    };
   };
 
-  return this;
+  var quadrawInstance = new quadraw();
+  draw();
+  return quadrawInstance;
 };
