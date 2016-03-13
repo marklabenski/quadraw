@@ -108,6 +108,30 @@ cancelButton.addEventListener('click', function() {
   toggleAddCurveModal();
 });
 
+var isCurveInputValid = false;
+var isXMaxInputValid = true;
+var isXMinInputValid = true;
+
+var checkValidation = function () {
+  if(isCurveInputValid && isXMaxInputValid && isXMinInputValid) {
+    addCurveButton.disabled = false;
+  }
+};
+
+curveXMax.addEventListener('keyup', function() {
+  if(Number.isNaN(this.value )) {
+    isXMaxInputValid = false;
+  } else {
+    isXMaxInputValid = true;
+  }
+});
+curveXMin.addEventListener('keyup', function() {
+  if(Number.isNaN(this.value )) {
+    isXMinInputValid = false;
+  } else {
+    isXMinInputValid = true;
+  }
+});
 curveInput.addEventListener('keyup', function(evt) {
   var input = this.value;
 
@@ -121,7 +145,8 @@ curveInput.addEventListener('keyup', function(evt) {
   if(matches != undefined && matches.length >= 3) {
     params = {a: matches[1], b: matches[2], c:matches[3]};
 
-    addCurveButton.disabled = false;
+    isCurveInputValid = true;
+    checkValidation();
   }
 });
 
