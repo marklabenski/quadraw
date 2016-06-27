@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QuaDraw - draw quadratic functions with canvas</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+<canvas class="graphcanvas">
+
+</canvas>
+<div class="menus">
+    <h3 class="menu-heading">Zoom</h3>
+    <ul class="menu scaling">
+        <li>
+            <button class="scale scale-up half-sized">+</button>
+            <button class="scale scale-down half-sized">-</button>
+        </li>
+    </ul>
+    <h3 class="menu-heading">Curves</h3>
+    <button class="add-curve-button">add Curve</button>
+    <ul class="menu curves">
+
+    </ul>
+</div>
+
+<div class="add-curve-form hidden">
+    <div class="add-curve-form-inner">
+        <input type="text" class="curve-input" placeholder="ax²+bx+c">
+        <input type="text" class="curve-x-min" placeholder="xMin">
+        <input type="text" class="curve-x-max" placeholder="xMax">
+        <div class="button-bar">
+            <button class="add-button half-sized" disabled>add</button>
+            <button class="half-sized cancel">cancel</button>
+        </div>
+    </div>
+</div>
+<div class="add-curve-background hidden"></div>
+<script src="scripts/quadraw/Quadraw.js"></script>
+<script src="scripts/quadraw/Curve.js"></script>
+<script src="scripts/quadraw/CoordsPlane.js"></script>
+<script src="scripts/main.js"></script>
+</body>
+</html>
